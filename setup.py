@@ -12,7 +12,7 @@ setup(
         'requests',
         'importlib-metadata; python_version >= "3.7"',
         'pyparsing >= 2.3.0',
-        'gmpy2 == 2.0.8',
+        'gmpy2 >= 2.2.0',
         'numpy >= 1.15.4',
         'psutil',
         'toposort == 1.6',
