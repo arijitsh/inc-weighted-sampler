@@ -332,7 +332,7 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                             joint_logprob_dict[decision_node_id] = np.log(0)
                         else:
                             # compatible
-                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[1]].node_type == 'T':
                                 pass
                             else:
@@ -353,7 +353,7 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                             joint_logprob_dict[decision_node_id] = np.log(0)
                         else:
                             # compatible
-                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[0]].node_type == 'T':
                                 # if child is true node we do not do anything
                                 pass
@@ -377,7 +377,7 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                             joint_logprob_dict[decision_node.node_id] = np.log(0)
                         else:
                             # compatible
-                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[0]].node_type == 'T':
                                 pass
                             else:
@@ -389,7 +389,7 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                             node_assignment_output[decision_node.node_id] = 0
                             joint_logprob_dict[decision_node.node_id] = np.log(0)
                         else:
-                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[0]].node_type == 'T':
                                 pass
                             else:
@@ -399,7 +399,7 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                     else:
                         # unassigned
                         if type(node_assignment_output[decision_node.child_list[0]]) == int:
-                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[1]].node_type == 'T':
                                 pass
                             else:
@@ -407,7 +407,7 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                             node_assignment_output[decision_node_id] = current_assignment
                             joint_logprob_dict[decision_node_id] = np.log(decision_node.branch_parameters[1]) + joint_logprob_dict[decision_node.child_list[1]]
                         elif type(node_assignment_output[decision_node.child_list[1]]) == int:
-                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[0]].node_type == 'T':
                                 pass
                             else:
@@ -430,15 +430,15 @@ def sample_assignment_pzddc(initial_partial_assignment_set, node_list, root_node
                             current_variable = decision_node.variable
                             sampled_random_vals = np.random.binomial(1, normalized_joint_hi_prob, num_samples)
                             if node_list[decision_node.child_list[1]].node_type == 'T':
-                                hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int)
+                                hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int64)
                             else:
-                                pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int)
+                                pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int64)
                                 hi_assignments = node_assignment_output[decision_node.child_list[1]]
                                 hi_assignments = np.hstack((pos_assignment_array, hi_assignments))
                             if node_list[decision_node.child_list[0]].node_type == 'T':
-                                lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                                lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                             else:
-                                lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                                lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                                 lo_assignments = node_assignment_output[decision_node.child_list[0]]
                                 lo_assignments = np.hstack((lo_assignment_array, lo_assignments))
                             hi_assignments = hi_assignments[sampled_random_vals == 1]
@@ -504,7 +504,7 @@ def sample_assignment_pzddc_empty(node_list, root_node, true_node, layer_lists, 
                 neg_literal = -1*pos_literal
                 if decision_node.false_child_branch == 1:
                     # if node is zero-surpassed node, with lo child
-                    current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                    current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                     if node_list[decision_node.child_list[0]].node_type != 'T':
                         current_assignment = np.hstack((current_assignment, node_assignment_output[decision_node.child_list[0]]))
                     node_assignment_output[decision_node_id] = current_assignment
@@ -512,7 +512,7 @@ def sample_assignment_pzddc_empty(node_list, root_node, true_node, layer_lists, 
                     joint_logprob_dict[decision_node_id] = np.log(decision_node.branch_parameters[0]) + joint_logprob_dict[decision_node.child_list[0]]
                 elif decision_node.false_child_branch == 0:
                     # if node is zero-surpassed node, with hi child
-                    current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                    current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                     if node_list[decision_node.child_list[1]].node_type != 'T':
                         current_assignment = np.hstack((current_assignment, node_assignment_output[decision_node.child_list[1]]))
                     node_assignment_output[decision_node_id] = current_assignment
@@ -535,15 +535,15 @@ def sample_assignment_pzddc_empty(node_list, root_node, true_node, layer_lists, 
                     sampled_random_vals = np.random.binomial(1, normalized_joint_hi_prob, num_samples)
                     num_hi = int(np.sum(sampled_random_vals[sampled_random_vals == 1]))
                     if node_list[decision_node.child_list[1]].node_type == 'T':
-                        hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int)
+                        hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int64)
                     else:
-                        pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int)
+                        pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int64)
                         hi_assignments = node_assignment_output[decision_node.child_list[1]]
                         hi_assignments = np.hstack((pos_assignment_array, hi_assignments))
                     if node_list[decision_node.child_list[0]].node_type == 'T':
-                        lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                        lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                     else:
-                        lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                        lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                         lo_assignments = node_assignment_output[decision_node.child_list[0]]
                         lo_assignments = np.hstack((lo_assignment_array, lo_assignments))
                     hi_assignments = hi_assignments[sampled_random_vals == 1]
@@ -628,7 +628,7 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                             prob_dict[decision_node_id] = mpq(0)
                         else:
                             # compatible
-                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[1]].node_type == 'T':
                                 # if child is true node we do not do anything
                                 pass
@@ -649,7 +649,7 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                             prob_dict[decision_node_id] = mpq(0)
                         else:
                             # compatible
-                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                             if node_list[decision_node.child_list[0]].node_type == 'T':
                                 # if child is true node we do not do anything
                                 pass
@@ -671,7 +671,7 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                             prob_dict[decision_node_id] = mpq(0)
                         else:
                             # compatible
-                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                             if decision_node.child_list[0].node_type == 'T':
                                 pass
                             else:
@@ -683,7 +683,7 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                             node_assignment_output[decision_node.node_id] = 0
                             prob_dict[decision_node_id] = mpq(0)
                         else:
-                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                             if decision_node.child_list[0].node_type == 'T':
                                 pass
                             else:
@@ -693,7 +693,7 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                     else:
                         # unassigned
                         if type(node_assignment_output[decision_node.child_list[0]]) == int:
-                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                             if decision_node.child_list[1].node_type == 'T':
                                 pass
                             else:
@@ -701,7 +701,7 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                             node_assignment_output[decision_node_id] = current_assignment
                             prob_dict[decision_node_id] = mpq(decision_node.branch_parameters[1]) * prob_dict[decision_node.child_list[1]]
                         elif type(node_assignment_output[decision_node.child_list[1]]) == int:
-                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                            current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                             if decision_node.child_list[0].node_type == 'T':
                                 pass
                             else:
@@ -720,15 +720,15 @@ def sample_assignment_pzddc_hp(initial_partial_assignment_set, node_list, root_n
                             sampled_random_vals = np.random.binomial(1, norm_hi_prob, num_samples)
                             num_hi = int(np.sum(sampled_random_vals[sampled_random_vals == 1]))
                             if node_list[decision_node.child_list[1]].node_type == 'T':
-                                hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int)
+                                hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int64)
                             else:
-                                pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int)
+                                pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int64)
                                 hi_assignments = node_assignment_output[decision_node.child_list[1]]
                                 hi_assignments = np.hstack((pos_assignment_array, hi_assignments))
                             if node_list[decision_node.child_list[0]].node_type == 'T':
-                                lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                                lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                             else:
-                                lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                                lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                                 lo_assignments = node_assignment_output[decision_node.child_list[0]]
                                 lo_assignments = np.hstack((lo_assignment_array, lo_assignments))
                             hi_assignments = hi_assignments[sampled_random_vals == 1]
@@ -789,7 +789,7 @@ def sample_assignment_pzddc_empty_hp(node_list, root_node, true_node, layer_list
                 neg_literal = -1*pos_literal
                 if decision_node.false_child_branch == 1:
                     # if node has false child, with lo child
-                    current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int)
+                    current_assignment = np.full([num_samples, 1], neg_literal, dtype=np.int64)
                     if node_list[decision_node.child_list[0]].node_type != 'T':
                         current_assignment = np.hstack((current_assignment, node_assignment_output[decision_node.child_list[0]]))
                     node_assignment_output[decision_node_id] = current_assignment
@@ -797,7 +797,7 @@ def sample_assignment_pzddc_empty_hp(node_list, root_node, true_node, layer_list
                     prob_dict[decision_node_id] = mpq(decision_node.branch_parameters[0]) * prob_dict[decision_node.child_list[0]]
                 elif decision_node.false_child_branch == 0:
                     # if node has false child, with hi child
-                    current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int)
+                    current_assignment = np.full([num_samples, 1], pos_literal, dtype=np.int64)
                     if node_list[decision_node.child_list[1]].node_type != 'T':
                         current_assignment = np.hstack((current_assignment, node_assignment_output[decision_node.child_list[1]]))
                     node_assignment_output[decision_node_id] = current_assignment
@@ -815,15 +815,15 @@ def sample_assignment_pzddc_empty_hp(node_list, root_node, true_node, layer_list
                     sampled_random_vals = np.random.binomial(1, norm_hi_prob, num_samples)
                     num_hi = int(np.sum(sampled_random_vals[sampled_random_vals == 1]))
                     if node_list[decision_node.child_list[1]].node_type == 'T':
-                        hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int)
+                        hi_assignments = np.full([num_samples, 1], current_variable, dtype=np.int64)
                     else:
-                        pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int)
+                        pos_assignment_array = np.full([num_samples, 1], current_variable, dtype=np.int64)
                         hi_assignments = node_assignment_output[decision_node.child_list[1]]
                         hi_assignments = np.hstack((pos_assignment_array, hi_assignments))
                     if node_list[decision_node.child_list[0]].node_type == 'T':
-                        lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                        lo_assignments = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                     else:
-                        lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int)
+                        lo_assignment_array = np.full([num_samples, 1], -1 * current_variable, dtype=np.int64)
                         lo_assignments = node_assignment_output[decision_node.child_list[0]]
                         lo_assignments = np.hstack((lo_assignment_array, lo_assignments))
                     hi_assignments = hi_assignments[sampled_random_vals == 1]
