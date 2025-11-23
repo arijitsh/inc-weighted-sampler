@@ -96,7 +96,7 @@ def compile_cnf_file(kc_compiler_path, unweighted_cnf_file, timeout=None, robdd=
         pass
     # determine if compiling to OBDD[AND] or regular OBDD
     if not robdd:
-        command_string = kc_compiler_path + ' Panini --lang 1 --out ' + obdd_file + ' ' + unweighted_cnf_file
+        command_string = kc_compiler_path + ' Panini --lang \'OBDD[AND]\' --out ' + obdd_file + ' ' + unweighted_cnf_file
     else:
         command_string = kc_compiler_path + ' Panini --lang 0 --out ' + obdd_file + ' ' + unweighted_cnf_file
     if  timeout != None:
