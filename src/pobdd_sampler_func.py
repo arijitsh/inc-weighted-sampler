@@ -98,7 +98,7 @@ def compile_cnf_file(kc_compiler_path, unweighted_cnf_file, timeout=None, robdd=
     if not robdd:
         command_string = kc_compiler_path + ' Panini --lang \'OBDD[AND]\' --out ' + obdd_file + ' ' + unweighted_cnf_file
     else:
-        command_string = kc_compiler_path + ' Panini --lang 0 --out ' + obdd_file + ' ' + unweighted_cnf_file
+        command_string = kc_compiler_path + ' Panini --lang \'OBDD\' --out ' + obdd_file + ' ' + unweighted_cnf_file
     if  timeout != None:
         command_string = 'timeout ' + str(timeout) + 's ' + command_string
     subprocess.call(command_string, shell=True)
